@@ -65,4 +65,21 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.put('/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { item, price, timeToGetReady } = req.body;
+
+    if (!id || !item || !price || !timeToGetReady) return res.status(400).send();
+
+    const data = { item, price, timeToGetReady };
+
+    const ref = await db.doc(id).set(data, { merge: true });
+
+    res.status(200).send({ id, ...data });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 module.exports = router;
