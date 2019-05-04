@@ -31,4 +31,22 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const order = await db.doc(id).get();
+
+    if (!order.exists)
+      return res.status(404).send({});
+
+    res.status(200).send({
+      id: order.id,
+      ...order.data()
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 module.exports = router;
