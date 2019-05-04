@@ -55,7 +55,7 @@ router.post('/', async (req, res) => {
 
     if (!item || !price || !timeToGetReady) return res.status(400).send();
 
-    const data = { item, price, timeToGetReady };
+    const data = { item, price: parseFloat(price).toFixed(2), timeToGetReady: parseInt(timeToGetReady), date: + new Date() };
 
     const ref = await db.add(data);
 
@@ -72,7 +72,7 @@ router.put('/:id', async (req, res) => {
 
     if (!id || !item || !price || !timeToGetReady) return res.status(400).send();
 
-    const data = { item, price, timeToGetReady };
+    const data = { item, price: parseFloat(price).toFixed(2), timeToGetReady: parseInt(timeToGetReady), date: + new Date() };
 
     await db.doc(id).set(data, { merge: true });
 
