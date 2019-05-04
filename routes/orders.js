@@ -25,9 +25,9 @@ router.get('/', async (req, res) => {
       orders.push({ id: doc.id, ...doc.data() });
     });
 
-    res.status(200).send(orders)
+    return res.status(200).send(orders)
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 });
 
@@ -40,12 +40,12 @@ router.get('/:id', async (req, res) => {
     if (!order.exists)
       return res.status(404).send({});
 
-    res.status(200).send({
+    return res.status(200).send({
       id: order.id,
       ...order.data()
     });
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 });
 
@@ -59,9 +59,9 @@ router.post('/', async (req, res) => {
 
     const ref = await db.add(data);
 
-    res.status(200).send({ id: ref.id, ...data })
+    return res.status(200).send({ id: ref.id, ...data })
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 });
 
@@ -74,11 +74,11 @@ router.put('/:id', async (req, res) => {
 
     const data = { item, price, timeToGetReady };
 
-    const ref = await db.doc(id).set(data, { merge: true });
+    await db.doc(id).set(data, { merge: true });
 
-    res.status(200).send({ id, ...data });
+    return res.status(200).send({ id, ...data });
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 });
 
