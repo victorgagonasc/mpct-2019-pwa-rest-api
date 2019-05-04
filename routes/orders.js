@@ -49,4 +49,20 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.post('/', async (req, res) => {
+  try {
+    const { item, price, timeToGetReady } = req.body;
+
+    if (!item || !price || !timeToGetReady) return res.status(400).send();
+
+    const data = { item, price, timeToGetReady };
+
+    const ref = await db.add(data);
+
+    res.status(200).send({ id: ref.id, ...data })
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 module.exports = router;
