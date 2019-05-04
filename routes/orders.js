@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var firebase = require('firebase');
+const express = require('express');
+const router = express.Router();
+const firebase = require('firebase');
 
-var config = {
+const config = {
   apiKey: '',
   authDomain: '',
   databaseURL: '',
@@ -14,8 +14,21 @@ var config = {
 
 firebase.initializeApp(config);
 
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+const db = firebase.firestore().collection('orders');
+
+router.get('/', async (req, res) => {
+  try {
+    const orderSnapshot = await db.get();
+    const orders = [];
+
+    orderSnapshot.forEach(doc => {
+      orders.push({ id: doc.id, ...doc.data() });
+    });
+
+    res.status(200).send(orders)
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 module.exports = router;
