@@ -82,4 +82,18 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+router.delete('/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    if (!id) return res.status(400).send();
+
+    await db.doc(id).delete();
+
+    return res.status(200).send(id);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 module.exports = router;
