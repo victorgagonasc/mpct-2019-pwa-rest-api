@@ -88,9 +88,14 @@ router.delete('/:id', async (req, res) => {
 
     if (!id) return res.status(400).send();
 
+    const order = await db.doc(id).get();
+
+    if (!order.exists)
+      return res.status(404).send({});
+
     await db.doc(id).delete();
 
-    return res.status(200).send(id);
+    return res.status(200).send({ id });
   } catch (error) {
     res.status(500).send(error);
   }
